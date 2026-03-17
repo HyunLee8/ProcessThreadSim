@@ -1,0 +1,108 @@
+# =========================
+# CLion / JetBrains IDE
+# =========================
+.idea/
+*.iml
+
+# But keep shared run configurations if you want (optional)
+# !.idea/runConfigurations
+
+# =========================
+# CMake
+# =========================
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# =========================
+# Build directories
+# =========================
+build/
+bin/
+out/
+target/
+
+# =========================
+# Compiled objects / binaries
+# =========================
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.libs
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Static libraries
+*.a
+*.lib
+
+# Debug symbols
+*.dSYM/
+*.su
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS generated files
+# =========================
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# =========================
+# Coverage / profiling
+# =========================
+*.gcda
+*.gcno
+*.gcov
+gmon.out
+
+# =========================
+# Cache / misc
+# =========================
+.cache/
+.clangd/
+
+# =========================
+# Environment files (optional)
+# =========================
+.env
+.env.local
+
+# =========================
+# Package managers (optional)
+# =========================
+# Conan
+conanbuildinfo.*
+conaninfo.txt
+
+# vcpkg (optional)
+vcpkg_installed/
