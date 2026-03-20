@@ -72,7 +72,7 @@ static void state_transition (PCB *pcb, ProcessState prevState, ProcessState nex
         pcb->state = nextState;
         printf("[TICK %i] PID %i: %s\n", tick, pcb->pid, state_to_string(pcb->state));
     } else {
-        printf("Error: Not the correct state");
+        printf("Error: Not the correct state\n");
     }
 }
 
@@ -85,7 +85,7 @@ void terminate_process(PCB *pcb, int tick) { state_transition(pcb, RUNNING, TERM
 
 /*=== Run Scheduler ===*/
 
-void run_scheduler(Scheduler *s, PCB **processes, int size, int quantum) {
+void run_scheduler(Scheduler *s, PCB **processes, const int size, const int quantum) {
     s->quantum = quantum;
     int running_scheduler = 1;
 
@@ -96,25 +96,30 @@ void run_scheduler(Scheduler *s, PCB **processes, int size, int quantum) {
         //        to analyze how it will afffect the rest
         //        of the scheduler. I think its good but
         //        I will see tmr
-
         Interrupt *intr = check_interrupts(s->tick);
-        if (intr->type == INT_TIMER) {
+        if (intr != NULL && intr->type == INT_TIMER) {
             preempt(s->running, s->tick);
             enqueue(s, dequeue(s));
-        } else if (intr->type == INT_IO_COMPLETE) {
+        } else if (intr != NULL && intr->type == INT_IO_COMPLETE) {
             for (int i = 0; i < size; i++) {
-                if (processes[i]->state == WAITING && intr->target_pid == processes[i]->pid ) {
-                    io_complete(processes[i], s->tick);
-                    enqueue(s, processes[i]);
+                if (intr->fire_at_tick >= processes[i]->arrival_time &&
+                    processes[i]->state == WAITING &&
+                    intr->target_pid == processes[i]->pid ) {
+                        io_complete(processes[i], s->tick);
+                        enqueue(s, processes[i]);
                 }
             }
-        } else if (intr->type == INT_KILL) {
+        } else if (intr!= NULL && intr->type == INT_KILL) {
             for (int i = 0; i < size; i++) {
-                if (intr->target_pid = processes[i]->pid && processes[i]->state != TERMINATED) {
-                    terminate_process(processes[i], s->tick);
+                if (intr->fire_at_tick >= processes[i]->arrival_time &&
+                    intr->target_pid == processes[i]->pid &&
+                    processes[i]->state != TERMINATED) {
+                        processes[i] -> state = TERMINATED;
+                        printf("Interruption at [Tick %i] PID %i KILLED\n", s->tick, processes[i]->pid);
                 }
             }
         }
+
 
         for (int i = 0; i < size; i++) {                           //entire for loop is to run through
             if (processes[i]->state == WAITING) {                   //all Waiting processes, otherwise

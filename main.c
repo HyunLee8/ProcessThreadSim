@@ -3,18 +3,29 @@
 #include <string.h>
 #include "pcb.h"
 #include "scheduler.h"
+#include "interrupt.h"
 
 int main(void) {
     PCB *pcb1 = create_process(0, 0,  10, 3, 1);
-    PCB *pcb2 = create_process(1, 2,  6,  0, 2);
-    PCB *pcb3 = create_process(2, 4,  8,  5, 3);
-    PCB *pcb4 = create_process(3, 2, 10, 3, 1);
+    PCB *pcb2 = create_process(1, 3,  6,  0, 2);
+    PCB *pcb3 = create_process(2, 2,  8,  5, 3);
+    PCB *pcb4 = create_process(3, 4, 10, 3, 1);
 
     PCB **processes = (PCB **)malloc(4*sizeof(PCB *));
     processes[0] = pcb1;
     processes[1] = pcb2;
     processes[2] = pcb3;
     processes[3] = pcb4;
+
+    Interrupt *intr1 = create_interrupt(INT_KILL, 0, 0);
+    Interrupt *intr2 = create_interrupt(INT_KILL, 1, 1);
+    Interrupt *intr3 = create_interrupt(INT_KILL, 2, 2);
+    Interrupt *intr4 = create_interrupt(INT_KILL, 3, 3);
+
+    register_interrupt(intr1);
+    register_interrupt(intr2);
+    register_interrupt(intr3);
+    register_interrupt(intr4);
 
     Scheduler *s = createScheduler();
     run_scheduler(s, processes, 4, 4);

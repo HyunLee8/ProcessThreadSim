@@ -6,7 +6,7 @@
 static Interrupt *pending[MAX_INTERRUPTS];
 static int pending_count = 0;
 
-Interrupt *create_interrupt(InterruptType type, int fire_at_tick, int target_pid) {
+Interrupt *create_interrupt(const InterruptType type, const int fire_at_tick, const int target_pid) {
     Interrupt *interrupt = malloc(sizeof(Interrupt));
 
     interrupt->type = type;
@@ -22,8 +22,8 @@ void register_interrupt(Interrupt *interrupt) {
     pending_count++;
 }
 
-Interrupt *check_interrupt(int tick) {
-    for (int i = 0; i < MAX_INTERRUPTS; i++) {
+Interrupt *check_interrupts(const int tick) {
+    for (int i = 0; i < pending_count; i++) {
         if (pending[i]->fire_at_tick == tick) {
             pending[i]->handled = 1;
             return pending[i];

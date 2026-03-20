@@ -18,7 +18,6 @@ typedef struct {
 
 Interrupt *create_interrupt(InterruptType type, int fire_at_tick, int target_pid);
 
-
 void register_interrupt(Interrupt *interrupt);
 Interrupt *check_interrupts(int tick);
 
